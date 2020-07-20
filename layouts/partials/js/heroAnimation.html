@@ -1,0 +1,5 @@
+{{ $modernizr := resources.Get "vendor/modernizr/modernizr-2.0.6.js" | minify }}
+{{ $chromajs := resources.Get "vendor/chromajs/chroma.js" | minify }}
+{{ $heroAnimation := resources.Get "js/heroAnimation.js" | minify }}
+{{ $bundleHeroAnimation := slice $modernizr $chromajs $heroAnimation | resources.Concat "js/bundleHeroAnimation.js" | fingerprint }}
+<script src="{{ $bundleHeroAnimation.Permalink }}" integrity="{{ $bundleHeroAnimation.Data.Integrity }}"></script>

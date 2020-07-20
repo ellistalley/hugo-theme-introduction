@@ -12,11 +12,14 @@
     <body>
         {{ with .Site.GetPage "/home" }}
         <section id="top" class="hero is-{{ .Site.Params.home.introHeight | default "fullheight" }}">
-            <!-- Hero head section to play nice with Bulma -->
-            <div class="hero-head"></div>
+		    <!-- Hero head section to play nice with Bulma -->
+            <div class="hero-head" style="position: relative; z-index: 1"></div>
+		
+		    <!-- Hero canvas background for animations -->
+		    <canvas id="hero-background-canvas" style="position: absolute; width: 100%; height: 100%; z-index: 0"></canvas>
 
             <!-- Super sweet Hero body title -->
-            <div class="hero-body">
+            <div class="hero-body" style="position: relative; z-index: 1">
                 <div class="container has-text-centered">
                     <!-- Title and tagline -->
                     <h1 class="bold-title {{ if or (.Site.Params.fadeIn | default true) .Site.Params.fadeInIndex }}fade-in one{{ end }}">
@@ -32,14 +35,16 @@
                     </div>
                     <!-- End top social icons -->
                 </div>
-            </div> <!-- End of Hero body -->
+            </div> 
+		    <!-- End of Hero body -->
             {{ end }}
 
-            <div class="hero-foot {{ if or (.Site.Params.fadeIn | default true) .Site.Params.fadeInIndex }}fade-in three{{ end }}">
+            <div class="hero-foot {{ if or (.Site.Params.fadeIn | default true) .Site.Params.fadeInIndex }}fade-in three{{ end }}" style="position: relative; z-index: 1">
                 <!-- Tell them all about it! -->
                 {{ partial "nav.html" . }}
             </div>
-        </section> <!-- Done with Hero -->
+        </section> 
+	    <!-- Done with Hero -->
 
         {{ with .Site.GetPage "/home" }}
         {{ $home := . }}
@@ -130,6 +135,7 @@
         <!-- End of fade in three section -->
         {{ partial "footer/scripts.html" . }}
         {{ partial "js/owlCarousel.html" . }}
+	{{ partial "js/heroAnimation.html" . }}
 
         {{ if .Site.Params.home.localTime }}
         {{ $momentjs := resources.Get "vendor/momentjs/moment.min.js" }}
