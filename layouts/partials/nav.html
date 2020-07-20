@@ -56,8 +56,8 @@
             {{ if eq (os.Stat .File.Dir).Name "projects" }}
                 <!-- Now for some cool projects -->
                 {{ if $isHome }}
-                <a class="navbar-item" href="{{ printf "#%s" ( .Title | urlize) | relLangURL }}">{{ .Title | markdownify }}</a>
-                {{ else }}
+                <a class="navbar-item" href="{{ printf "#%s" (.Title | urlize) }}">{{ .Title | markdownify }}</a>
+		{{ else }}
                 {{ $pageIsInProjects := eq $.Page.Section "project"}}
                 {{ if not (and $pageIsInProjects (eq $.Page.Kind "section")) }}
                   <a class="navbar-item" href="{{ .Permalink }}">
@@ -72,7 +72,7 @@
             {{ else if eq (os.Stat .File.Dir).Name "blog" }}
                 <!-- Let`s show some blog posts -->
                 {{ if $isHome }}
-                <a class="navbar-item" href="{{ printf "#%s" ( .Title | urlize) | relLangURL }}">{{ .Title | markdownify }}</a>
+                <a class="navbar-item" href="{{ printf "#%s" ( .Title | urlize) }}">{{ .Title | markdownify }}</a>
                 {{ else }}
                 {{ $pageIsInBlog := eq $.Page.Section "blog"}}
                 {{ if not (and $pageIsInBlog (eq $.Page.Kind "section")) }}
