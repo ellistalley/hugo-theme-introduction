@@ -3,6 +3,7 @@ title: "{{ replace .TranslationBaseName "-" " " | title }}" # Title of your proj
 date: {{ .Date }}
 weight: 0 # Order in which to show this project on the home page
 external_link: "" # Optional external link instead of modal
+videolink: "" #Link to video service i.e. Youtube, Vimeo, etc.
 resources:
     - src: plant.jpg
       params:

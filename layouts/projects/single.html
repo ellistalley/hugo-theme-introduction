@@ -1,27 +1,37 @@
 {{ define "main" }}
     <div class="container markdown top-pad">
-        {{ with .Resources.ByType "image" }}
-        <div class="has-text-centered">
-            {{ $moreThanOneImage := gt (len .) 1 }}
-            {{ if $moreThanOneImage }}
-            <div class="owl-carousel owl-theme">
-            {{ end }}
-                {{ range sort . "Params.weight" }}
-                    {{ $image := .Resize "1000x" }}
-                    {{ if $moreThanOneImage }}
-                    <div class="item owl-height">
-                    {{ end }}
-                        <img src="{{ $image.RelPermalink }}" class="img-responsive" alt="{{ $image.Name }}">
-                    {{ if $moreThanOneImage }}
-                    </div>
-                    {{ end }}
-                {{ end }}
-            {{ if $moreThanOneImage }}
+        
+        <!-- If we have a video link, show that. If not, check for images. -->
+        {{ with .Params.videolink}}
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                <iframe src="{{ . }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
             </div>
+        {{ else }}
+            {{ with .Resources.ByType "image" }}
+                <div class="has-text-centered">
+                    {{ $moreThenOneImage := gt (len .) 1 }}
+                    {{ if $moreThenOneImage }}
+                        <div class="owl-carousel owl-theme">
+                    {{ end }}
+                    {{ range sort . "Params.weight" }}
+                        {{ $image := .Resize "1000x" }}
+                        {{ if $moreThenOneImage }}
+                            <div class="item owl-height">
+                        {{ end }}
+                        <img src="{{ $image.RelPermalink }}" class="img-responsive" alt="{{ $image.Name }}">
+                        {{ if $moreThenOneImage }}
+                            </div>
+                        {{ end }}
+                    {{ end }}
+                    {{ if $moreThenOneImage }}
+                        </div>
+                    {{ end }}
+                </div> 
             {{ end }}
-        </div>
         {{ end }}
+
         {{ .Content }}
+        
     </div>
     <!-- End post content -->
     {{ partial "comments.html" . }}
