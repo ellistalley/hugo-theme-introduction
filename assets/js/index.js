@@ -34,7 +34,17 @@ $(".card").click(function () {
     $("html").addClass("modal-open");
 });
 $(".modal-close").click(function () {
-    $($(this).attr("data-target")).removeClass("is-active");
+    let dataTarget = $(this).attr("data-target");
+    let modal = $(dataTarget);
+    let videoplayer = document.getElementById(dataTarget + "-video");
+    if (videoplayer)
+    {
+      videoplayer.contentWindow.postMessage('{"event":"command", "func":"pauseVideo", "args":""}', '*');
+      var data = {event: 'command', func: 'seekTo', args: [0, true]};
+      var message = JSON.stringify(data);
+      videoplayer.contentWindow.postMessage(message, '*');
+    }
+    modal.removeClass("is-active");
     $("html").removeClass("modal-open");
 });
 $(document).keypress(function(e) {
