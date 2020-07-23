@@ -62,7 +62,7 @@
             <!-- If we have a video link, show that. If not, check for images. -->
             {{ with .Params.videolink}}
                 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-                    <iframe src="{{ . }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+                    <iframe src="{{ . }}" id="#project-{{ $index }}-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
                 </div>
             {{ else }}
                 {{ with .Resources.ByType "image" }}
