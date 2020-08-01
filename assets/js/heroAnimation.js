@@ -25,6 +25,7 @@ function canvasSupport() {
 
 var canvas;
 var context;
+var fadeInGradient;
 var alphaGradient;
 var chromaScale;
 var colorLeft;
@@ -38,6 +39,9 @@ function startAnimation() {
     	canvas = document.getElementById("hero-background-canvas");
     	context = canvas.getContext("2d");
     
+        // Set up initial fode in
+        fadeInGradient = 0.0;
+            	
     	// Create color scale and set initial colors
     	chromaScale = chroma.scale(['99FFFF', '#66ff99', 'ff99ff', 'ff66ff', 'FFFF00', 'F0F000', '99FFFF']).domain([0.0, 24.0]);
     	colorLeftLerp = 0.0;
@@ -49,32 +53,34 @@ function startAnimation() {
     	alphaGradient = context.createLinearGradient(0, canvas.height * 0.25, 0, canvas.height);
     	alphaGradient.addColorStop(0.0, "rgba(255, 255, 255, 0.0)");
     	alphaGradient.addColorStop(0.8, "rgba(255, 255, 255, 1.0)");
-	alphaGradient.addColorStop(1.0, "rgba(255, 255, 255, 1.0)");
+    	alphaGradient.addColorStop(1.0, "rgba(255, 255, 255, 1.0)");
 
     	// Setup and start timer for successive frames (24fps)
-	var timer = setInterval(onTimer, 1000/12);
+	    var timer = setInterval(onTimer, 1000/12);
 }
 
 function onTimer()
-{
-    	// Update color lerp indicies
-	colorLeftLerp += 0.1;
-    	colorRightLerp += 0.1;
-    	colorLeftLerp = colorLeftLerp % 24.0;
-    	colorRightLerp = colorRightLerp % 24.0;
+{   	
+    	// Update fade in
+    	fadeInGradient += 0.1;
+    	fadeInGradient = Math.min(fadeInGradient, 1.0);
     
     	// Update colors
-    	colorLeft = chromaScale(colorLeftLerp).hex();
-    	colorRight = chromaScale(colorRightLerp).hex();
+    	colorLeftLerp += 0.1;
+        colorRightLerp += 0.1;
+        colorLeftLerp = colorLeftLerp % 24.0;
+        colorRightLerp = colorRightLerp % 24.0;
+    	colorLeft = chroma.mix('FFFFFF', chromaScale(colorLeftLerp).hex(), fadeInGradient);
+    	colorRight = chroma.mix('FFFFFF', chromaScale(colorRightLerp).hex(), fadeInGradient);
 
     	// Render colors
     	let colorGradient = context.createLinearGradient(0, 0, canvas.width, 0);
     	colorGradient.addColorStop(0.0, colorLeft);
     	colorGradient.addColorStop(1.0, colorRight);
-	context.fillStyle = colorGradient;
+	    context.fillStyle = colorGradient;
     	context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Render white-to-transparent hero bottom mask
-    context.fillStyle = alphaGradient;
-    context.fillRect(0, canvas.height * 0.25, canvas.width, canvas.height);
+        // Render white-to-transparent hero bottom mask
+        context.fillStyle = alphaGradient;
+        context.fillRect(0, canvas.height * 0.25, canvas.width, canvas.height);
 }
